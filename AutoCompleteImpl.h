@@ -8,7 +8,9 @@
 
 typedef struct TrieNode{
 	struct TrieNode *children[ALPHABET_SIZE];
+	char * label;
 	bool isEndOfWord;
+
 } TrieNode;
 
 

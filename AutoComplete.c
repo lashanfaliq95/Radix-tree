@@ -1,5 +1,5 @@
 #include "AutoCompleteImpl.h"
-
+	
 #define NUMBER_OF_WORDS (354935)
 #define INPUT_WORD_SIZE (100)
 static char* words[NUMBER_OF_WORDS];
