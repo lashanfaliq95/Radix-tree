@@ -19,3 +19,6 @@ struct TrieNode *search(struct TrieNode *root, const char *word);
 void traverse(char prefix[], struct TrieNode *root);
 void insert(struct TrieNode *root, const char *word);
 char* stradd(const char* a, const int b);
+char* stradd1(const char* a,const char* b);
+void traverseRadix(char prefix[], struct TrieNode *root);
+void trieToRadix(struct TrieNode *root);
