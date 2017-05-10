@@ -38,15 +38,22 @@ int main(){
       	insert(root,words[i]);
       }
       printf("insered \n" );*/
+      printf("hel \n");
       insert(root,"abcd");
       insert(root,"abcdef");
-      insert(root,"abcdeg");
-      insert(root,"bcdg");
-      insert(root,"bcdef");
+      insert(root,"abcdgg");
+      insert(root,"bbc");
+      insert(root,"bbcd");
+       insert(root,"bbcg")
+      insert(root,"compute");
+      insert(root,"computer");
+      insert(root,"computed");
+       insert(root,"computgd");
       trieToRadix(root);
       printf("%s\n",root->children[0]->label );
       printf("%s\n",root->children[1]->label );
-
+      printf("%s\n",root->children[2]->label );
+      printf("end" );
      /*while (1) {
 
         printf("Enter keyword: ");
