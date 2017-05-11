@@ -9,7 +9,7 @@ char* stradd(const char* a, const int b){
 }
 char* stradd1(const char* a,const char* b){
   size_t len = strlen(a)+strlen(b);
-    char *str2 =(char*)malloc(len * sizeof(char) + 1); /* one for extra char, one for trailing zero */
+    char *str2 =(char*)malloc(len * sizeof(char) + 2); /* one for extra char, one for trailing zero */
   strcpy(str2, a);
   strcat(str2,b);
   str2[len+1]='\0';
@@ -35,17 +35,15 @@ struct TrieNode *createTrieNode() {
 
     struct TrieNode *currentNode=root;
     int index,i;
-   //printf("inside\n" );
-    for( i=0;i<size-1;i++){
+    for( i=0;i<size;i++){
       index=CHAR_TO_INDEX(word[i]);
       
       if(currentNode->children[index]==NULL){//when first creating the child
         currentNode->children[index]=createTrieNode();
         currentNode=currentNode->children[index];
-        currentNode->label=(char*)malloc(sizeof(char)+1);
+        currentNode->label=(char*)malloc(sizeof(char)+1);//creating the label
         currentNode->label[0]=word[i];
         currentNode->label[1]='\0';
-      //  printf("insasf\n" );
       }
       else{//when a child is already there
         currentNode=currentNode->children[index];
@@ -66,43 +64,66 @@ struct TrieNode *createTrieNode() {
     }
     return currentNode;
   }
-  void traverse(char prefix[], struct TrieNode *root){
-if(root==NULL){//if word enterd is wrong
-  printf("Enter correct word\n");
-}
-else{
-  int i=0;
-  if(root->isEndOfWord==true){
-    printf("%s\n",prefix);
-  }
-  while(i<26){
-    if(root->children[i]!=NULL){
-      traverse(stradd(prefix,i),root->children[i]);//calling traverse again for the new prefix
-    }
-    i++;
-  }
-}
-}
+   struct TrieNode *search1(struct TrieNode *root, const char *word) {
+    struct TrieNode *currentNode=root;
+    int j,i=0,index=0,temp,size=strlen(word);
+    bool equal;
+    //printf("size %d\n",size );
+    while(index<size){
+        if(currentNode->children[i]!=NULL){
+         int len=strlen(currentNode->children[i]->label);
+         //printf("len %d\n",len );
+         //printf("index %d\n",index );
+          if(len==1){
+            if(word[index]==currentNode->children[i]->label[index]){
+                currentNode=currentNode->children[index];
+                index++;
+                i=0;
+              }
+          }
+          else{
+            equal=true;
+             temp=index;
+            for(j=0;j<len;j++){
+             if(word[temp]!=currentNode->children[i]->label[j]){
 
-void trieToRadix(struct TrieNode *root){
+                        equal=false;
+
+              }
+              temp++;
+         }
+         if(equal==true){
+          printf("len %d\n",len );
+         currentNode=currentNode->children[i];
+         i=0;
+         index=index+len;
+
+       }
+       }
+      }
+       i++;
+    }
+    return currentNode;
+  }
+
+void trieToRadix(struct TrieNode *root){//compressing the tree
   struct TrieNode *temp=root;
   int i,count=0,len,index=0,j=0;
   bool cond=false;
   for(i=0;i<26;i++){
     if(root->children[i]!=NULL){
-      count++;
+      count++;//to check if the node has only one child
       index=i;
     }
   } 
-      printf("count %d %d\n",count,index );
 
-  if(count==1 && root->label!=NULL){
+  if(count==1 && root->label!=NULL){//to bypass the root we use the second condition
     struct TrieNode *temp=root->children[index];
     len=strlen(root->label);//len of the word in current node
     
   //reallocating mem for the new word
     root->label=stradd(root->label,index);//getiing the new word combining with the cahracter in the next word
-     for(i=0;i<26;i++){
+     for(i=0;i<26;i++){//freeing the children of the current node
       if(root->children[i]!=NULL){//if the next node has a  child
       root->children[i]=NULL;
       free(root->children[i]);
@@ -117,7 +138,6 @@ void trieToRadix(struct TrieNode *root){
         root->children[i]=temp->children[i];//if it already has node in that slot
       }
     }
-    printf("label %s\n",root->label );
    if(temp->isEndOfWord==true)
       root->isEndOfWord=true;
     free(temp);
@@ -129,10 +149,8 @@ void trieToRadix(struct TrieNode *root){
   {
     if(root->children[i]!=NULL){
       condition=false;
-      printf("children %s\n",root->children[i]->label );
      }
   }
-  printf("condition %d\n",condition );
   if(condition==true)
     return;
 
@@ -158,7 +176,7 @@ else{
   }
   while(i<26){
     if(root->children[i]!=NULL){
-      traverse(stradd1(prefix,root->children[i]->label),root->children[i]);//calling traverse again for the new prefix
+      traverseRadix(stradd1(prefix,root->children[i]->label),root->children[i]);//calling traverse again for the new prefix
     }
     i++;
   }
