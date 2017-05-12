@@ -30,39 +30,22 @@ int main(){
    	word_count++;
    	words[word_count] = malloc(INPUT_WORD_SIZE);
    } 
-   
+   int i;
    root=createTrieNode();
-      insert(root,"abcd");
-      insert(root,"abcded");
-      insert(root,"abcfk");
-      insert(root,"compute");
-      insert(root,"computer");
- printf("%s\n",root->children[0]->label);
- printf("%s\n",root->children[2]->label);
-    trieToRadix(root);
- printf("%s\n",root->children[0]->label);
- printf("%s\n",root->children[0]->children[3]->label);
- printf("%s\n",root->children[2]->label);
-//	printf("%s\n",root->children[2]->children[17]->label);
-      while(1){
-
-        printf("Enter keyword: ");
-         char str[100];
-        receiveInput(str);
-                TrieNode * node = search1(root,str);
-                printf("%s\n",node->label );
-        traverseRadix(str,node);
-
+      for(i=0;i<NUMBER_OF_WORDS;i++){
+      	insert(root,words[i]);
       }
-     /*while (1) {
+      trieToRadix(root);
+  
+     while (1) {
 
         printf("Enter keyword: ");
         char str[100];
         receiveInput(str);
         printf("\n==========================================================\n");
         printf("\n********************* Possible Words ********************\n");
-        TrieNode * node = search(root,str);
+        TrieNode * node = search1(root,str);
         traverseRadix(str,node);
         printf("==========================================================\n");
-    }*/
+    }
     }

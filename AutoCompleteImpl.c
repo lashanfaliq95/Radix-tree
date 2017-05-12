@@ -93,7 +93,7 @@ struct TrieNode *createTrieNode() {
               temp++;
          }
          if(equal==true){
-          printf("len %d\n",len );
+          //printf("len %d\n",len );
          currentNode=currentNode->children[i];
          i=0;
          index=index+len;
@@ -172,7 +172,7 @@ if(root==NULL){//if word enterd is wrong
 else{
   int i=0;
   if(root->isEndOfWord==true){
-    printf("%s\n",prefix);
+    printf("%s",prefix);
   }
   while(i<26){
     if(root->children[i]!=NULL){
