@@ -34,18 +34,22 @@ int main(){
    root=createTrieNode();
       for(i=0;i<NUMBER_OF_WORDS;i++){
       	insert(root,words[i]);
-      }
+      }  
       trieToRadix(root);
-  
-     while (1) {
-
+         
+   while (1) {
         printf("Enter keyword: ");
         char str[100];
         receiveInput(str);
         printf("\n==========================================================\n");
         printf("\n********************* Possible Words ********************\n");
-        TrieNode * node = search1(root,str);
-        traverseRadix(str,node);
+         struct TrieNode * node=search1(root,str);
+         if(strlen(str)<strlen(node->label)){
+             traverseRadix(node->label,node);
+    } else{
+    	 traverseRadix(str,node);
+    }
         printf("==========================================================\n");
     }
+        return 0;
     }

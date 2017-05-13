@@ -32,16 +32,16 @@ struct TrieNode *createTrieNode() {
   void insert(struct TrieNode *root, const char *word) {
 
     int size=strlen(word);
-
+   
     struct TrieNode *currentNode=root;
     int index,i;
-    for( i=0;i<size;i++){
+    for( i=0;i<size-1;i++){
       index=CHAR_TO_INDEX(word[i]);
       
       if(currentNode->children[index]==NULL){//when first creating the child
         currentNode->children[index]=createTrieNode();
         currentNode=currentNode->children[index];
-        currentNode->label=(char*)malloc(sizeof(char)+1);//creating the label
+        currentNode->label=(char*)malloc(sizeof(char)+2);//creating the label
         currentNode->label[0]=word[i];
         currentNode->label[1]='\0';
       }
@@ -67,41 +67,25 @@ struct TrieNode *createTrieNode() {
    struct TrieNode *search1(struct TrieNode *root, const char *word) {
     struct TrieNode *currentNode=root;
     int j,i=0,index=0,temp,size=strlen(word);
+  
     bool equal;
-    //printf("size %d\n",size );
     while(index<size){
         if(currentNode->children[i]!=NULL){
          int len=strlen(currentNode->children[i]->label);
-         //printf("len %d\n",len );
-         //printf("index %d\n",index );
-          if(len==1){
-            if(word[index]==currentNode->children[i]->label[index]){
-                currentNode=currentNode->children[index];
-                index++;
+           
+            if(word[index]==currentNode->children[i]->label[0]){
+                
+                currentNode=currentNode->children[i];
                 i=0;
-              }
-          }
-          else{
-            equal=true;
-             temp=index;
-            for(j=0;j<len;j++){
-             if(word[temp]!=currentNode->children[i]->label[j]){
-
-                        equal=false;
-
-              }
-              temp++;
+                  for(j=0;j<len;j++){
+            index++;
          }
-         if(equal==true){
-          //printf("len %d\n",len );
-         currentNode=currentNode->children[i];
-         i=0;
-         index=index+len;
-
-       }
-       }
+               }
+      
+        
       }
        i++;
+      
     }
     return currentNode;
   }
@@ -123,6 +107,7 @@ void trieToRadix(struct TrieNode *root){//compressing the tree
     
   //reallocating mem for the new word
     root->label=stradd(root->label,index);//getiing the new word combining with the cahracter in the next word
+   
      for(i=0;i<26;i++){//freeing the children of the current node
       if(root->children[i]!=NULL){//if the next node has a  child
       root->children[i]=NULL;
@@ -136,10 +121,12 @@ void trieToRadix(struct TrieNode *root){//compressing the tree
           root->children[i]=createTrieNode();
          }
         root->children[i]=temp->children[i];//if it already has node in that slot
+        if(temp->isEndOfWord==true)
+         root->isEndOfWord=true;
       }
     }
-   if(temp->isEndOfWord==true)
-      root->isEndOfWord=true;
+     if(temp->isEndOfWord==true)
+         root->isEndOfWord=true;
     free(temp);
     cond=true;
      } 
@@ -166,13 +153,16 @@ void trieToRadix(struct TrieNode *root){//compressing the tree
   }
 }
   void traverseRadix(char prefix[], struct TrieNode *root){
+
 if(root==NULL){//if word enterd is wrong
   printf("Enter correct word\n");
 }
 else{
   int i=0;
-  if(root->isEndOfWord==true){
-    printf("%s",prefix);
+  if(root->isEndOfWord==true ){
+    printf("%s\n",prefix);
+
+    
   }
   while(i<26){
     if(root->children[i]!=NULL){
